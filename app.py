@@ -50,6 +50,19 @@ def add_song(user_id):
     return redirect(url_for('list_songs', user_id=user_id))
 
 
+@app.route('/users/<int:user_id>/songs/<int:song_id>/delete', methods=['POST'])
+def delete_song(user_id, song_id):
+    data_manager.delete_song(song_id)
+    return redirect(url_for('list_songs', user_id=user_id))
+
+
+@app.route('/users/<int:user_id>/songs/<int:song_id>/update', methods=['POST'])
+def update_song(user_id, song_id):
+    new_title = request.form.get('new_title')
+    data_manager.update_song(song_id, new_title)
+    return redirect(url_for('list_songs', user_id=user_id))
+
+
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
