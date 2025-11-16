@@ -1,11 +1,14 @@
 from flask import Flask, render_template, redirect, url_for, request
 from models import db, User, Song
+from data_manager import DataManager
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///data/music.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
+
+data_manager = DataManager()
 
 @app.route('/')
 def index():
