@@ -1,9 +1,11 @@
 from flask import Flask, render_template, redirect, url_for, request
 from models import db, User, Song
 from data_manager import DataManager
+import os
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///data/music.db"
+basedir = os.path.abspath(os.path.dirname(__file__))
+app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(basedir, 'data/music.db')}"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db.init_app(app)
@@ -12,13 +14,14 @@ data_manager = DataManager()
 
 @app.route('/')
 def index():
-    return render_template('index.html', users=[])
+    users = data_manager.get_users()
+    return render_template('index.html', users=users)
 
 
 @app.route('/users', methods=['POST'])
 def create_user():
     name = request.form.get('name')
-    print(f"User added: {name}")  # nur zum Testen
+    data_manager.create_user(name)
     return redirect(url_for('index'))
 
 
