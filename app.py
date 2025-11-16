@@ -2,6 +2,7 @@ from flask import Flask, render_template, redirect, url_for, request
 from models import db, User, Song
 from data_manager import DataManager
 import os
+import requests
 
 app = Flask(__name__)
 basedir = os.path.abspath(os.path.dirname(__file__))
@@ -38,12 +39,28 @@ def add_song(user_id):
     genre = request.form.get('genre')
     cover_url = request.form.get('cover_url')
 
+    # Fallbacks: If no input -> Use iTunes API
+    if not artist or not genre or not cover_url:
+        search_term = title.replace(" ", "+")
+        url = f"https://itunes.apple.com/search?term={search_term}&limit=1&entity=song"
+        response = requests.get(url).json()
+        results = response.get("results")
+
+        if results:
+            first = results[0]
+            if not artist:
+                artist = first.get("artistName")
+            if not genre:
+                genre = first.get("primaryGenreName")
+            if not cover_url:
+                cover_url = first.get("artworkUrl100")
+
     song = Song(
-        title = title,
-        artist = artist,
-        genre = genre,
-        cover_url = cover_url,
-        user_id = user_id
+        title=title,
+        artist=artist if artist else "Unknown Artist",
+        genre=genre if genre else "Unknown Genre",
+        cover_url=cover_url if cover_url else "",
+        user_id=user_id
     )
 
     data_manager.add_song(song)
