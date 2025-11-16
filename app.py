@@ -1,10 +1,12 @@
-from flask import Flask, render_template, redirect, url_for, request
+from flask import Flask, render_template, redirect, url_for, request, session
 from models import db, User, Song
 from data_manager import DataManager
 import os
 import requests
+from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
+app.secret_key = "supersecretkey-change-later"
 basedir = os.path.abspath(os.path.dirname(__file__))
 app.config['SQLALCHEMY_DATABASE_URI'] = f"sqlite:///{os.path.join(basedir, 'data/music.db')}"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -22,12 +24,40 @@ def index():
 @app.route('/users', methods=['POST'])
 def create_user():
     name = request.form.get('name')
-    data_manager.create_user(name)
+    password = request.form.get('password')
+    hashed_pw = generate_password_hash(password)
+    data_manager.create_user(name, hashed_pw)
+    return redirect(url_for('index'))
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    if request.method == 'POST':
+        name = request.form.get('name')
+        password = request.form.get('password')
+
+        user = User.query.filter_by(name=name).first()
+
+        if user and check_password_hash(user.password_hash, password):
+            session['user_id'] = user.id
+            return redirect(url_for('list_songs', user_id=user.id))
+        else:
+            return render_template("login.html", error="Wrong username or password")
+
+    return render_template("login.html")
+
+
+@app.route('/logout')
+def logout():
+    session.pop('user_id', None)
     return redirect(url_for('index'))
 
 
 @app.route('/users/<int:user_id>/songs')
 def list_songs(user_id):
+    if 'user_id' not in session or session['user_id'] != user_id:
+        return redirect(url_for('login'))
+
     songs = data_manager.get_songs(user_id)
     return render_template('songs.html', songs=songs, user_id=user_id)
 

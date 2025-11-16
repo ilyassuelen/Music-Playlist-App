@@ -2,8 +2,8 @@ from models import db, User, Song
 
 class DataManager():
     # ----- User -----
-    def create_user(self, name):
-        new_user = User(name=name)
+    def create_user(self, name, password_hash):
+        new_user = User(name=name, password_hash=password_hash)
         db.session.add(new_user)
         db.session.commit()
         return new_user
