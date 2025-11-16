@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="section">
+    <div class="section-header">
+        <h2 class="section-title">Users</h2>
+        <p class="section-subtitle">Choose a listener to open their neon playlist universe.</p>
+    </div>
+
+    <div class="user-grid">
+        {% for user in users %}
+        <div class="user-card" onclick="window.location='{{ url_for('list_songs', user_id=user.id) }}'">
+            <div class="user-avatar">
+                <div class="avatar-circle">
+                    <span class="avatar-icon">🎧</span>
+                </div>
+            </div>
+            <div class="user-meta">
+                <p class="user-name">{{ user.name }}</p>
+                <p class="user-tag">Tap to view playlists</p>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <div class="panel panel-glass">
+        <h3 class="panel-title">Add new user</h3>
+        <p class="panel-text">Create a new profile and start building unique playlists.</p>
+
+        <form action="{{ url_for('create_user') }}" method="post" class="form-grid">
+            <input type="text" name="name" placeholder="Enter user name..." required class="input-neon">
+            <button type="submit" class="btn-primary">➕ Create User</button>
+        </form>
+    </div>
+</section>
+
+{% endblock %}

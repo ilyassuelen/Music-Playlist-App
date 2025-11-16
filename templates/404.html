@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block content %}
+
+<div class="error-wrapper">
+    <div class="error-orb"></div>
+    <h2 class="error-title">404 • Lost in the Sound</h2>
+    <p class="error-text">
+        The track you’re looking for is out of range.
+        Try heading back to the main stage.
+    </p>
+    <button class="btn-primary" onclick="window.location='{{ url_for('index') }}'">⟵ Back to Users</button>
+</div>
+
+{% endblock %}

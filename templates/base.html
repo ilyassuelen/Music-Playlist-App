@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Neon Playlists</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='images/favicon.png') }}">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body>
+<div class="bg-anim"></div>
+
+<header class="navbar">
+    <div class="logo-area" onclick="window.location='{{ url_for('index') }}'">
+        <div class="logo-pulse"></div>
+        <div class="logo-text-wrap">
+            <span class="logo-title">Neon<span>Playlists</span></span>
+            <span class="logo-sub">Futuristic Music Hub</span>
+        </div>
+    </div>
+
+    <div class="nav-right">
+        <div class="eq-visualizer">
+            <span class="eq-bar"></span>
+            <span class="eq-bar"></span>
+            <span class="eq-bar"></span>
+            <span class="eq-bar"></span>
+            <span class="eq-bar"></span>
+        </div>
+    </div>
+</header>
+
+<main class="container">
+    {% block content %}{% endblock %}
+</main>
+
+<footer class="footer">
+    <span>🎧 Stay in the flow • NeonPlaylists</span>
+</footer>
+
+</body>
+</html>

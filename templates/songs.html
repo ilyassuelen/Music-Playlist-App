@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block content %}
+
+<section class="section">
+    <div class="section-header">
+        <h2 class="section-title">Playlist</h2>
+        <p class="section-subtitle">
+            Manage tracks in this user’s neon playlist. Add, tweak, or remove songs.
+        </p>
+    </div>
+
+    <div class="songs-layout">
+        <div class="panel panel-glass panel-form">
+            <h3 class="panel-title">Add a new track</h3>
+            <p class="panel-text">
+                You can später z.B. nur den Titel eingeben und den Rest per API befüllen.
+                Die Felder sind optional erweiterbar.
+            </p>
+
+            <form action="{{ url_for('add_song', user_id=user_id) }}" method="post" class="form-vertical">
+                <input type="text" name="title" placeholder="Song title..." required class="input-neon">
+                <input type="text" name="artist" placeholder="Artist (optional)..." class="input-neon">
+                <input type="text" name="genre" placeholder="Genre (optional)..." class="input-neon">
+                <input type="text" name="cover_url" placeholder="Cover image URL (optional)..." class="input-neon">
+                <button type="submit" class="btn-primary btn-full">➕ Add to Playlist</button>
+            </form>
+        </div>
+
+        <div class="songs-grid">
+            {% for song in songs %}
+            <div class="song-card">
+                <div class="song-cover-wrap">
+                    {% if song.cover_url %}
+                        <img src="{{ song.cover_url }}" alt="{{ song.title }}" class="song-cover">
+                    {% else %}
+                        <div class="song-cover-placeholder">
+                            <span>♪</span>
+                        </div>
+                    {% endif %}
+                    <div class="song-glow"></div>
+                </div>
+
+                <div class="song-info-block">
+                    <h3 class="song-title">{{ song.title }}</h3>
+                    <p class="song-meta">
+                        {% if song.artist %}{{ song.artist }}{% else %}Unknown Artist{% endif %}
+                        {% if song.genre %} • {{ song.genre }}{% endif %}
+                    </p>
+                </div>
+
+                <div class="song-actions">
+                    <form action="{{ url_for('update_song', user_id=user_id, song_id=song.id) }}" method="post" class="inline-form">
+                        <input type="text" name="new_title" placeholder="New title..." required class="input-neon input-small">
+                        <button class="btn-edit">✏ Rename</button>
+                    </form>
+
+                    <form action="{{ url_for('delete_song', user_id=user_id, song_id=song.id) }}" method="post" class="inline-form">
+                        <button class="btn-delete">🗑 Remove</button>
+                    </form>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+
+{% endblock %}
