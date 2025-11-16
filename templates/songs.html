@@ -10,11 +10,11 @@
     </div>
 
     <div class="songs-layout">
+        <!-- Add New Song Panel -->
         <div class="panel panel-glass panel-form">
             <h3 class="panel-title">Add a new track</h3>
             <p class="panel-text">
-                You can später z.B. nur den Titel eingeben und den Rest per API befüllen.
-                Die Felder sind optional erweiterbar.
+                Enter title – the rest is auto-filled by the iTunes API. 😎
             </p>
 
             <form action="{{ url_for('add_song', user_id=user_id) }}" method="post" class="form-vertical">
@@ -22,13 +22,17 @@
                 <input type="text" name="artist" placeholder="Artist (optional)..." class="input-neon">
                 <input type="text" name="genre" placeholder="Genre (optional)..." class="input-neon">
                 <input type="text" name="cover_url" placeholder="Cover image URL (optional)..." class="input-neon">
+
                 <button type="submit" class="btn-primary btn-full">➕ Add to Playlist</button>
             </form>
         </div>
 
+        <!-- Songs Grid -->
         <div class="songs-grid">
             {% for song in songs %}
             <div class="song-card">
+
+                <!-- Album Cover -->
                 <div class="song-cover-wrap">
                     {% if song.cover_url %}
                         <img src="{{ song.cover_url }}" alt="{{ song.title }}" class="song-cover">
@@ -40,23 +44,37 @@
                     <div class="song-glow"></div>
                 </div>
 
+                <!-- Title + Artist + Genre -->
                 <div class="song-info-block">
                     <h3 class="song-title">{{ song.title }}</h3>
                     <p class="song-meta">
                         {% if song.artist %}{{ song.artist }}{% else %}Unknown Artist{% endif %}
                         {% if song.genre %} • {{ song.genre }}{% endif %}
                     </p>
+
+                    <!-- AUDIO PREVIEW 🎧 -->
+                    {% if song.preview_url %}
+                        <audio controls class="audio-preview">
+                            <source src="{{ song.preview_url }}" type="audio/mpeg">
+                            Your browser does not support the audio element.
+                        </audio>
+                    {% endif %}
+
                 </div>
 
+                <!-- Buttons: Edit + Delete -->
                 <div class="song-actions">
-                    <form action="{{ url_for('update_song', user_id=user_id, song_id=song.id) }}" method="post" class="inline-form">
-                        <input type="text" name="new_title" placeholder="New title..." required class="input-neon input-small">
-                        <button class="btn-edit">✏ Rename</button>
+
+                    <!-- Rename and Delete Buttons-->
+                    <form action="{{ url_for('update_song', user_id=user_id, song_id=song.id) }}" method="post" class="inline-form action-form">
+                        <input type="text" name="new_title" placeholder="New name..." required class="input-neon input-small">
+                        <button class="btn-action btn-edit">Update title</button>
                     </form>
 
-                    <form action="{{ url_for('delete_song', user_id=user_id, song_id=song.id) }}" method="post" class="inline-form">
-                        <button class="btn-delete">🗑 Remove</button>
+                    <form action="{{ url_for('delete_song', user_id=user_id, song_id=song.id) }}" method="post" class="inline-form action-form">
+                    <button class="btn-action btn-delete">Delete song</button>
                     </form>
+
                 </div>
             </div>
             {% endfor %}

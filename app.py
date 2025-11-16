@@ -71,9 +71,10 @@ def add_song(user_id):
     artist = request.form.get('artist')
     genre = request.form.get('genre')
     cover_url = request.form.get('cover_url')
+    preview_url = request.form.get('preview_url')
 
-    # Fallbacks: If no input -> Use iTunes API
-    if not artist or not genre or not cover_url:
+    # If empty fields → Use iTunes API
+    if not artist or not genre or not cover_url or not preview_url:
         search_term = title.replace(" ", "+")
         url = f"https://itunes.apple.com/search?term={search_term}&limit=1&entity=song"
         response = requests.get(url).json()
@@ -87,12 +88,16 @@ def add_song(user_id):
                 genre = first.get("primaryGenreName")
             if not cover_url:
                 cover_url = first.get("artworkUrl100")
+            if not preview_url:
+                preview_url = first.get("previewUrl")
 
+    # Create song object
     song = Song(
         title=title,
         artist=artist if artist else "Unknown Artist",
         genre=genre if genre else "Unknown Genre",
         cover_url=cover_url if cover_url else "",
+        preview_url=preview_url if preview_url else "",
         user_id=user_id
     )
 

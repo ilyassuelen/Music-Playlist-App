@@ -15,5 +15,6 @@ class Song(db.Model):
     artist = db.Column(db.String(100))
     genre = db.Column(db.String(50))
     cover_url = db.Column(db.String)
+    preview_url = db.Column(db.String)
 
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)

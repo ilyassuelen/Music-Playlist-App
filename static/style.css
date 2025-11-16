@@ -572,3 +572,65 @@ body::before {
         margin-top: 18px;
     }
 }
+
+/* ===== NEON AUDIO PLAYER UPGRADE ===== */
+audio.audio-preview {
+    width: 100%;
+    margin-top: 10px;
+    border-radius: 12px;
+    background: #080a1c;
+    border: 1px solid #1c244b;
+    padding: 6px;
+    box-shadow: 0 0 14px #00f5ff33;
+}
+
+/* Remove default controls look (Webkit Browsers) */
+audio.audio-preview::-webkit-media-controls-panel {
+    background: linear-gradient(135deg, #0d112d, #081024);
+    border-radius: 12px;
+    border: 1px solid #1d2552;
+    box-shadow: inset 0 0 14px #00f5ff33;
+}
+
+/* Play Button */
+audio.audio-preview::-webkit-media-controls-play-button {
+    filter: drop-shadow(0 0 6px #00f5ff);
+    border-radius: 50%;
+    background-color: #00f5ff11;
+}
+
+audio.audio-preview::-webkit-media-controls-play-button:hover {
+    background-color: #00f5ff33;
+    filter: drop-shadow(0 0 10px #00f5ff);
+}
+
+/* Timeline Bar */
+audio.audio-preview::-webkit-media-controls-timeline {
+    background-color: #141a3c;
+    border-radius: 999px;
+    height: 6px;
+}
+
+/* Progress Filled */
+audio.audio-preview::-webkit-media-controls-timeline-container {
+    filter: drop-shadow(0 0 10px #00f5ff88);
+}
+
+/* Current Time + Duration Text */
+audio.audio-preview::-webkit-media-controls-current-time-display,
+audio.audio-preview::-webkit-media-controls-time-remaining-display {
+    color: #00f5ff !important;
+    text-shadow: 0 0 6px #00f5ff;
+}
+
+/* Volume Slider */
+audio.audio-preview::-webkit-media-controls-volume-slider {
+    filter: drop-shadow(0 0 6px #ff00ff66);
+    background: #141a3c !important;
+    border-radius: 999px;
+}
+
+/* Volume Button */
+audio.audio-preview::-webkit-media-controls-mute-button {
+    filter: drop-shadow(0 0 6px #ff00ff88);
+}
