@@ -31,6 +31,25 @@ def list_songs(user_id):
     return render_template('songs.html', songs=songs, user_id=user_id)
 
 
+@app.route('/users/<int:user_id>/songs', methods=['POST'])
+def add_song(user_id):
+    title = request.form.get('title')
+    artist = request.form.get('artist')
+    genre = request.form.get('genre')
+    cover_url = request.form.get('cover_url')
+
+    song = Song(
+        title = title,
+        artist = artist,
+        genre = genre,
+        cover_url = cover_url,
+        user_id = user_id
+    )
+
+    data_manager.add_song(song)
+    return redirect(url_for('list_songs', user_id=user_id))
+
+
 if __name__ == "__main__":
     with app.app_context():
         db.create_all()
