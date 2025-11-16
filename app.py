@@ -26,8 +26,11 @@ def create_user():
     name = request.form.get('name')
     password = request.form.get('password')
     hashed_pw = generate_password_hash(password)
-    data_manager.create_user(name, hashed_pw)
-    return redirect(url_for('index'))
+
+    user = data_manager.create_user(name, hashed_pw)
+    session['user_id'] = user.id
+
+    return redirect(url_for('list_songs', user_id=user.id))
 
 
 @app.route('/login', methods=['GET', 'POST'])
